@@ -1,11 +1,14 @@
 import React from 'react';
+import MyMap from './Map';
+
+
 
 const App = () =>{
   return (
-    <h1>
-      Hello world! I am using React
-    </h1>
+    <div id="map">
+      <MyMap />
+    </div>
   )
 }
 
-export default App
+export default App;
