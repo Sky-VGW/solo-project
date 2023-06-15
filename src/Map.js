@@ -6,20 +6,36 @@ const MyMap = () => {
 const [markers, setMarkers] = useState([]);
 const [popupContent, setPopupContent] = useState({})
 
+useEffect(() => {
+  fetch('http://localhost:8080/')
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    setMarkers(data)})
+}, []);
+
 const handleInputChange = (popupId, e) => {
   e.preventDefault();
   const updatedContent = { ...popupContent, [popupId]: e.target[0].value };
   setPopupContent(updatedContent);
 }
 
-const handleMapClick = (e) => {
+const handleMapClick = async (e) => {
   const { lat, lng } = e.latlng;
   const newMarker = {
     id: Math.random(),
     latlng: { lat, lng }
   };
+  await fetch('http://localhost:8080/', {
+    method: 'POST',
+    body: JSON.stringify(newMarker),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
+  console.log(newMarker)
   setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-  // console.log(markers);
+
 }
 
 const MapClickHandler = () => {
@@ -47,7 +63,6 @@ const MapClickHandler = () => {
       </Marker> 
 
       <MapClickHandler />
-
       {markers.map((marker) => (
         <Marker key={marker.id} position={marker.latlng} >
           <Popup id={marker.id}>
