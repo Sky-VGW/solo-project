@@ -5,17 +5,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leafl
 const MyMap = () => {
 const [markers, setMarkers] = useState([]);
 const [popupContent, setPopupContent] = useState({})
-console.log(popupContent)
+
 const handleInputChange = (popupId, e) => {
   e.preventDefault();
-  console.log(e)
-  const updatedContent = { ...popupContent, [popupId]: e.target[0].value }
+  const updatedContent = { ...popupContent, [popupId]: e.target[0].value };
   setPopupContent(updatedContent);
-  console.log(popupContent)
 }
 
 const handleMapClick = (e) => {
-  
   const { lat, lng } = e.latlng;
   const newMarker = {
     id: Math.random(),
@@ -37,19 +34,20 @@ const MapClickHandler = () => {
       center ={[40.748, -73.993]}
       zoom={13}
       style={{ height: '600px', width:'600px', borderRadius: '300px' }}
-
-      // onclick={handleMapClick}
     >
       <TileLayer 
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors"
       />
+
       <Marker position={[40.748, -73.993]} >
         <Popup>
           This is Codesmith<br/>I live here
         </Popup>
       </Marker> 
+
       <MapClickHandler />
+
       {markers.map((marker) => (
         <Marker key={marker.id} position={marker.latlng} >
           <Popup id={marker.id}>
@@ -58,9 +56,7 @@ const MapClickHandler = () => {
               <input
                 id={marker.id}
                 type="text"
-                value={popupContent[marker.id]}
-                // onChange={(e) => handleInputChange(marker.id, e)}
-                // onSubmit={(e) => handleInputChange(marker.id, e)}
+                // value={popupContent[marker.id]}
               />
               <input type='submit' value='submit'/>
             </form>
@@ -69,7 +65,6 @@ const MapClickHandler = () => {
         </Marker>
       ))}
     </MapContainer>
-    
   );
 }
 

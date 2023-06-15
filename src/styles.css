@@ -1,8 +1,15 @@
 body {
   display: flex;
-  background-color: rgba(228, 179, 119, 0.642);
+  flex-direction:column;
+  background-color: rgba(228, 179, 119, 0.895);
   justify-content: center;
   align-items: center;
+}
+
+h1 {
+  font-family: sans-serif;
+  font-style: italic;
+  color: rgb(95, 95, 115)
 }
 
 #map {
