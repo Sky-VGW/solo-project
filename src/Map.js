@@ -1,17 +1,75 @@
-import React from 'react';
-import { MapContainer, TileLayer, Marker} from 'react-leaflet';
+import React, { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leaflet';
 
+  
 const MyMap = () => {
-  const position = [51.505, -0.09];
+const [markers, setMarkers] = useState([]);
+const [popupContent, setPopupContent] = useState({})
+console.log(popupContent)
+const handleInputChange = (popupId, e) => {
+  e.preventDefault();
+  console.log(e)
+  const updatedContent = { ...popupContent, [popupId]: e.target[0].value }
+  setPopupContent(updatedContent);
+  console.log(popupContent)
+}
 
+const handleMapClick = (e) => {
+  
+  const { lat, lng } = e.latlng;
+  const newMarker = {
+    id: Math.random(),
+    latlng: { lat, lng }
+  };
+  setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
+  // console.log(markers);
+}
+
+const MapClickHandler = () => {
+  useMapEvents({
+    click:handleMapClick
+  })
+  return null;
+};
+  
   return (
-    <MapContainer center ={position} zoom={13} style={{ height: '800px', width:'800px', borderRadius: '30px' }}>
+    <MapContainer
+      center ={[40.748, -73.993]}
+      zoom={13}
+      style={{ height: '600px', width:'600px', borderRadius: '300px' }}
+
+      // onclick={handleMapClick}
+    >
       <TileLayer 
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="Map data &copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors"
+        attribution="&copy; <a href=&quot;https://www.openstreetmap.org/&quot;>OpenStreetMap</a> contributors"
       />
-      <Marker position={position} />
+      <Marker position={[40.748, -73.993]} >
+        <Popup>
+          This is Codesmith<br/>I live here
+        </Popup>
+      </Marker> 
+      <MapClickHandler />
+      {markers.map((marker) => (
+        <Marker key={marker.id} position={marker.latlng} >
+          <Popup id={marker.id}>
+            <form onSubmit={(e) => handleInputChange(marker.id, e)}>
+              <label for={marker.id}>Enter text:</label> 
+              <input
+                id={marker.id}
+                type="text"
+                value={popupContent[marker.id]}
+                // onChange={(e) => handleInputChange(marker.id, e)}
+                // onSubmit={(e) => handleInputChange(marker.id, e)}
+              />
+              <input type='submit' value='submit'/>
+            </form>
+            <p>{popupContent[marker.id]}</p>
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
+    
   );
 }
 
