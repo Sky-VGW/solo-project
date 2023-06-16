@@ -14,7 +14,8 @@ const Schema = mongoose.Schema;
 
 const markerSchema = new Schema({
   id: Number,
-  latlng: Object
+  latlng: Object,
+  message: String
 })
 
 const Marker = mongoose.model('markers', markerSchema);

@@ -29,6 +29,10 @@ app.post("/", markerController.addMarker, (req, res) => {
   return res.status(200);
 })
 
+app.patch("/", markerController.updateMarker, (req, res) => {
+  return res.status(200);
+})
+
 
 // app.use((err, req, res, next) => {
 //   const defaultErr = {

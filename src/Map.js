@@ -9,15 +9,23 @@ const [popupContent, setPopupContent] = useState({})
 useEffect(() => {
   fetch('http://localhost:8080/')
   .then(res => res.json())
-  .then(data => {
-    console.log(data);
-    setMarkers(data)})
+  .then(data => {setMarkers(data)})
 }, []);
 
-const handleInputChange = (popupId, e) => {
+const handleInputChange = async (popupId, e) => {
   e.preventDefault();
   const updatedContent = { ...popupContent, [popupId]: e.target[0].value };
   setPopupContent(updatedContent);
+  await fetch('http://localhost:8080/', {
+    method: 'PATCH',
+    body: JSON.stringify({
+      id: popupId,
+      message: e.target[0].value
+    }),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  })
 }
 
 const handleMapClick = async (e) => {
@@ -35,7 +43,6 @@ const handleMapClick = async (e) => {
   })
   console.log(newMarker)
   setMarkers((prevMarkers) => [...prevMarkers, newMarker]);
-
 }
 
 const MapClickHandler = () => {
@@ -71,7 +78,6 @@ const MapClickHandler = () => {
               <input
                 id={marker.id}
                 type="text"
-                // value={popupContent[marker.id]}
               />
               <input type='submit' value='submit'/>
             </form>

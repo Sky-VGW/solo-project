@@ -9,7 +9,7 @@ markerController.getMarkers = async (req, res, next) => {
     res.locals.markers = [...markers];
     return next();
   } catch (e) {
-    return next(err);
+    return next(e);
   }
 }
 
@@ -25,6 +25,16 @@ markerController.addMarker = async (req, res, next) => {
   } catch (e) {
     return next(e);
   }  
+ }
+
+ markerController.updateMarker = async (req, res, next) => {
+  try {
+    const { id, message } = req.body;
+    await Marker.findOneAndUpdate({'id': id}, {'message': message}, { upsert: true, new: true })
+    return next();
+  } catch(e) {
+    return next(e);
+  }
  }
 
 module.exports = markerController;
